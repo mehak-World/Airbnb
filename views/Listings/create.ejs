@@ -1,0 +1,75 @@
+<%- layout("/layouts/boilerplate") %>
+
+
+<form  method = "post" novalidate class = "needs-validation" action = "/listings" style = "width: 50%; margin-left: 10%; min-width: 200px;">
+    <h2 style = "margin-bottom: 10px;"> Create new Listing</h2>
+    <div class="mb-3">
+        <label for = "title" class="form-label">Title</label>
+        <input type = "text" class="form-control" id = "title" name = "title" required>
+        <div class="valid-feedback">
+      Looks good!
+    </div>
+   
+     <div class="invalid-feedback">
+        Please enter a title
+      </div>
+    </div>
+
+    <div class="mb-3">
+        <label for = "description" class="form-label">Description</label>
+        <textarea rows = "4" class="form-control" cols = "20" name = "description" required></textarea>
+
+        <div class="valid-feedback">
+      Looks good!
+    </div>
+
+     <div class="invalid-feedback">
+        Please enter a description
+      </div>
+    </div>
+
+
+    <div class="mb-3">
+        <label for = "image" class="form-label">Image URL</label>
+        <input type = "text" class="form-control"  id = "image" name = "image">
+    </div>
+
+    <div class=" row mb-3">
+        <div class="col col-4">
+            <label for = "price" class="form-label">Price</label>
+            <input type = "number" class="form-control" id = "price" name = "price" required>
+            <div class="valid-feedback">
+      Looks good!
+    </div>
+
+     <div class="invalid-feedback">
+        Please enter a price
+      </div>
+        </div>
+        <div class = "col-4">
+            <label for = "location" class="form-label">Location</label>
+            <input type = "text" class="form-control" id = "location" name = "location" required>
+                <div class="valid-feedback">
+        Looks good!
+        </div>
+         <div class="invalid-feedback">
+        Please enter the location
+      </div>
+        </div>
+        <div class="col-4">
+            <label for = "country" class="form-label">Country</label>
+            <input type = "text" class="form-control" id = "country" name = "country" required>
+                <div class="valid-feedback">
+        Looks good!
+        </div>
+         <div class="invalid-feedback">
+        Please enter the country
+      </div>
+        </div>
+      
+    </div>
+
+    
+
+   <button type = "submit" class="btn btn-primary" style = "background-color: rgb(248, 69, 99) !important; border: none; outline: none">Submit</button>
+</form>

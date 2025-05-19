@@ -1,0 +1,41 @@
+<%- layout("/layouts/boilerplate") %>
+
+
+<form  method = "post" action = "/listings/<%= listing.id %>" style = "width: 50%; margin-left: 10%; min-width: 200px;">
+    <h2 style = "margin-bottom: 10px;"> Edit this Listing</h2>
+    <div class="mb-3">
+        <label for = "title" class="form-label">Title</label>
+        <input type = "text" class="form-control" id = "title" value  = "<%= listing.title %>" name = "title">
+    </div>
+
+    <div class="mb-3">
+        <label for = "description" class="form-label">Description</label>
+        <textarea rows = "4" class="form-control" cols = "20"  name = "description"><%= listing.description %> </textarea>
+    </div>
+
+
+    <div class="mb-3">
+        <label for = "image" class="form-label">Image URL</label>
+        <input type = "text" class="form-control"  value  = "<%= listing.image %>" id = "image" name = "image">
+    </div>
+
+    <div class=" row mb-3">
+        <div class="col col-4">
+            <label for = "price" class="form-label">Price</label>
+            <input type = "text" class="form-control" value  = "<%= listing.price %>" id = "price" name = "price">
+        </div>
+        <div class = "col-4">
+            <label for = "location" class="form-label">Location</label>
+        <input type = "text" class="form-control" id = "location" value  = "<%= listing.location %>" name = "location">
+        </div>
+        <div class="col-4">
+            <label for = "country" class="form-label">Country</label>
+            <input type = "text" class="form-control" id = "country" value  = "<%= listing.country %>" name = "country">
+        </div>
+      
+    </div>
+
+    
+
+   <button type = "submit" class="btn btn-primary" style = "background-color: rgb(248, 69, 99) !important; border: none; outline: none">Edit</button>
+</form>
