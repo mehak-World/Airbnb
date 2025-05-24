@@ -14,14 +14,32 @@ const cookieParser = require("cookie-parser");
 const User = require("./models/User.js");
 const bcrypt = require("bcrypt")
 const {isLoggedIn, isAuthor} = require("./utils/middlewares.js")
+require("dotenv").config()
+const MongoStore = require('connect-mongo');
+
+let db_url = `mongodb+srv://mehaknarang75419:${process.env.DB_PASS}@cluster0.6tuitqz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 main()
   .then(() => console.log("Successfully connected to the database"))
   .catch((err) => console.log(err));
 
+
+
 async function main() {
-  await mongoose.connect("mongodb://127.0.0.1:27017/airbnb_proj");
+  await mongoose.connect(db_url);
 }
+
+const store = MongoStore.create({
+  mongoUrl: db_url,
+  crypto: {
+    secret: "mysecretkey"
+  },
+  touchAfter: 24*3600
+})
+
+store.on("error", () => {
+  console.log("error in mongo session store", err);
+})
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -29,6 +47,7 @@ app.use(express.json());
 app.use(cookieParser("mysecretkey"));
 app.use(
   session({
+    store,
     secret: "mysecretkey",
     resave: false,
     saveUninitialized: true,
@@ -138,6 +157,7 @@ app.post("/login", async (req, res) => {
     const user = await User.findOne({ username });
     if(!user){
       req.flash("error", "No such user exists");
+      res.redirect("/login");
     }
     else{
       // Verify the password
