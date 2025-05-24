@@ -103,3 +103,21 @@ html, body {
     margin-left: 25%;
   }
   
+  .star-rating {
+  display: inline-block;
+}
+
+.star {
+  color: #ccc; /* Default color */
+  font-size: 2em;
+  cursor: pointer;
+}
+
+.star.selected {
+  color: gold;
+}
+
+.review-container{
+  display: flex;
+  flex-wrap: wrap;
+}

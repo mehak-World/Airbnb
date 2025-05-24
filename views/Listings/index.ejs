@@ -1,7 +1,12 @@
 <%- layout("/layouts/Boilerplate.ejs") %>
+    
+   <% if (success && success.length > 0) { %>
+    <div class="alert alert-success alert-dismissible fade show"  style = "width: 60%; margin-left: 20px" role="alert">
+      <strong><%= success %></strong>
+    </div>
+<% } %>
+<h2 style = "margin-left: 20px"> All Listings</h2>
 
-
-    <h2 style = "margin-left: 20px"> All Listings</h2>
     <div class = "row row-cols-lg-4 row-cols-md-4 row-cols-sm-1">
         <% for(let listing of listings) { %>
             <a href = "/listings/<%= listing._id %>" style = "text-decoration: none;">

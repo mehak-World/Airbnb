@@ -1,0 +1,31 @@
+<%- layout("/layouts/boilerplate") %> 
+
+<hr style="width: 60%">
+<h2 style = "margin-top: 5%">All reviews (<%= reviews.length %>)</h2>
+<div class="review-container row" >
+  <% for (let i = 0; i < Math.min(5, reviews.length); i++) { review = reviews[i] %>
+    <div class="card col-4" style="width: 18rem; background: rgb(230, 229, 229); padding: 10px; margin: 10px;">
+      <div class="card-body">
+        <h6 class="card-subtitle mb-2 text-body-secondary">
+          <% for (let i = 0; i < review.rating; i++) { %>
+            <span class="star selected">★</span>
+          <% } %>
+        </h6>
+
+        <p class="card-text">
+          <i><%= review.comment %></i>
+          <br />
+            <br />
+        </p>
+
+        <p class="card-text">
+           <i><b>Created at</b></i> <%= review.createdAt.toLocaleDateString() %>
+        </p>
+        <br />
+        <form method = "post" action = "/listings/<%= listing._id %>/reviews/<%= review._id%>/delete">
+            <button class = "btn btn-dark">Delete</button>
+        </form>
+      </div>
+    </div>
+  <% } %>
+</div>

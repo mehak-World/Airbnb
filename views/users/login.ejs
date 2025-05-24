@@ -1,0 +1,36 @@
+<%- layout("/layouts/boilerplate") %>
+
+
+<div style="margin-left: 30%; margin-top: 5%">
+    <% if (error && error.length > 0) { %>
+    <div class="alert alert-danger alert-dismissible fade show" style = "width: 60%; margin-left: 20px" role="alert">
+      <strong><%= error %></strong>  
+    </div>
+<% } %>
+    <h2>Login</h2>
+    <br />
+  <form style="width: 40%" method = "POST" action = "/login">
+    <div class="mb-3">
+     
+      <input
+        type="text"
+        class="form-control"
+        id="username"
+        name = "username"
+        placeholder="Enter username"
+      />
+    </div>
+    <div class="mb-3">
+      
+      <input
+        type="text"
+        class="form-control"
+        id="password"
+        name = "password"
+        placeholder="Enter password"
+      />
+    </div>
+
+    <button type = "submit" class = "btn btn-primary">Login</button>
+  </form>
+</div>

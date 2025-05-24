@@ -1,0 +1,42 @@
+<%- layout("/layouts/boilerplate") %> 
+
+
+
+<div style="margin-left: 30%; margin-top: 5%">
+    <% if (success && success.length > 0) { %>
+    <div class="alert alert-success alert-dismissible fade show" style = "width: 60%; margin-left: 20px" role="alert">
+      <strong><%= success %></strong>  
+    </div>
+<% } %>
+
+<% if (error && error.length > 0) { %>
+    <div class="alert alert-danger alert-dismissible fade show" style = "width: 60%; margin-left: 20px" role="alert">
+      <strong><%= error %></strong>  
+    </div>
+<% } %>
+    <h2>Signup</h2>
+    <br />
+  <form style="width: 40%" method = "POST" action = "/signup">
+    <div class="mb-3">
+      <input
+        type="text"
+        class="form-control"
+        id="username"
+        name = "username"
+        placeholder="Enter username"
+      />
+    </div>
+    <div class="mb-3">
+      
+      <input
+        type="password"
+        class="form-control"
+        name = "password"
+        id="password"
+        placeholder="Enter password"
+      />
+    </div>
+
+    <button type = "submit" class = "btn btn-primary">Signup</button>
+  </form>
+</div>

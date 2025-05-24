@@ -1,27 +1,83 @@
 <%- layout("/layouts/boilerplate") %>
 
-<div class = "show-container" >
-    <div>
-        <img src = "<%= listing.image%>" height = "340px" width = "500px" style = "border-radius: 20px;">
+<div class="show-container">
+  <% if (success && success.length > 0) { %>
+    <div class="alert alert-success alert-dismissible fade show" style = "width: 60%; margin-left: 20px" role="alert">
+      <strong><%= success %></strong>  
     </div>
-    
-    <div style = "display: flex; flex-direction: column; gap: 2px; margin-top: 5px;">
-        <b><%= listing.title %></b>
-        ₹<%= listing.price.toLocaleString("en-IN") %> 
-        <br>
-        <br>
-        <p style = "max-width: 600px"><%= listing.description%> </p>
+<% } %>
+  <div>
+    <img
+      src="<%= listing.image%>"
+      height="340px"
+      width="500px"
+      style="border-radius: 20px"
+    />
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 2px; margin-top: 5px">
+    <b><%= listing.title %></b>
+    ₹<%= listing.price.toLocaleString("en-IN") %>
+    <br />
+    <br />
+    <p style="max-width: 600px"><%= listing.description%></p>
+  </div>
+
+  <div style="display: flex; gap: 10px">
+    <form method="GET" action="/listings/<%= listing._id %>/edit">
+      <button
+        style="
+          background-color: rgb(248, 69, 99) !important;
+          border: none;
+          outline: none;
+        "
+        class="btn btn-primary"
+      >
+        Edit this listing
+      </button>
+    </form>
+
+    <form method="POST" action="/listings/<%= listing._id %>/delete">
+      <button
+        class="btn btn-primary"
+        style="background-color: black !important; border: none; outline: none"
+      >
+        Delete this listing
+      </button>
+    </form>
+  </div>
+
+  <hr style="width: 60%" />
+
+  <div style="margin-top: 5%">
+    <h2>Add a review</h2>
+    <form
+  style="width: 50%"
+  method="POST"
+  action="/listings/<%= listing._id %>/reviews"
+>
+  <div class="mb-3">
+    <label class="form-label">Rating</label><br />
+    <div class="star-rating">
+      <span class="star" data-value="1" >&#9733;</span>
+      <span class="star" data-value="2" >&#9733;</span>
+      <span class="star" data-value="3" >&#9733;</span>
+      <span class="star" data-value="4">&#9733;</span>
+      <span class="star" data-value="5">&#9733;</span>
     </div>
-   
-    
-    <div style = "display: flex; gap: 10px;">
-        <form method = "GET" action = "/listings/<%= listing._id %>/edit" >
-            <button style = "background-color: rgb(248, 69, 99) !important; border: none; outline: none" class = "btn btn-primary">Edit this listing</button>
-        </form>
-        
-        <form method = "POST" action = "/listings/<%= listing._id %>/delete" >
-            <button class = "btn btn-primary" style = "background-color: black !important; border: none; outline: none">Delete this listing</button>
-        </form>
-    </div>
-   
+    <input type="hidden" name="rating" value= "3" id="ratingInput" />
+  </div>
+
+  <div class="mb-3">
+    <label for="comment" class="form-label">Comments</label>
+    <textarea class="form-control" id="comment" rows="3" name="comment"></textarea>
+  </div>
+  <button type="submit" class = "btn btn-primary" style = "background-color: rgb(245, 75, 103); outline: none; border: none">Add review</button>
+</form>
+
+  </div>
+
+  <div>
+     <%- include("../reviews/show", { reviews: listing.reviews, listing: listing }) %>
+  </div>
 </div>
