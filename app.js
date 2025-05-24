@@ -6,7 +6,6 @@ const path = require("path");
 const Listing = require("./models/Listing");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./ExpressError.js");
-const schema = require("./utils/SchemaValidation.js");
 const Review = require("./models/Review.js");
 const listingRouter = require("./routes/listing.js");
 const session = require("express-session");
@@ -14,7 +13,7 @@ const flash = require("connect-flash");
 const cookieParser = require("cookie-parser");
 const User = require("./models/User.js");
 const bcrypt = require("bcrypt")
-const jwt = require("jsonwebtoken")
+const {isLoggedIn, isAuthor} = require("./utils/middlewares.js")
 
 main()
   .then(() => console.log("Successfully connected to the database"))
@@ -45,6 +44,13 @@ app.use(flash());
 app.use((req, res, next) => {
   res.locals.success = req.flash("success") || "";
   res.locals.error = req.flash("error") || "";
+  if(req.session.userId){
+    res.locals.loggedIn = true;
+    res.locals.userId = req.session.userId;
+  }
+  else{
+    res.locals.loggedIn = false;
+  }
   next();
 });
 
@@ -55,13 +61,14 @@ app.engine("ejs", ejsMate);
 app.use("/listings", listingRouter);
 
 // Add review route
-app.post("/listings/:id/reviews", async (req, res) => {
+app.post("/listings/:id/reviews", isLoggedIn, async (req, res) => {
   try {
     const id = req.params.id;
     const { rating, comment } = req.body;
     const listing = await Listing.findById(id);
     // Create a review
     const review = new Review({ rating, comment });
+    review.author = req.session.userId;
     const savedRev = await review.save();
     listing.reviews.push(savedRev._id);
     await listing.save();
@@ -73,7 +80,7 @@ app.post("/listings/:id/reviews", async (req, res) => {
 
 // Delete review
 app.post(
-  "/listings/:listing_id/reviews/:review_id/delete",
+  "/listings/:listing_id/reviews/:review_id/delete", isLoggedIn, isAuthor,
   async (req, res) => {
     const { listing_id, review_id } = req.params;
     const listing = await Listing.findById(listing_id);
@@ -150,6 +157,8 @@ if (result) {
 } else {
     // Passwords don't match, authentication failed
     console.log('Passwords do not match! Authentication failed.');
+    req.flash("error", "Incorrect credentials")
+    res.redirect("/login");
 }
 });
     }
@@ -159,11 +168,22 @@ if (result) {
   }
 })
 
-
 app.get("/test-route", (req, res) => {
   console.log(req.session);
   res.send(req.session)
 })
+
+app.post("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error("Error destroying session:", err);
+      return res.status(500).send("Could not log out.");
+    }
+    res.clearCookie("connect.sid"); // Optional: clears cookie from browser
+    res.redirect("/login"); // or res.send("Logged out")
+  });
+});
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {

@@ -2,7 +2,8 @@ const express = require("express");
 const router = express.Router();
 const Listing = require("../models/Listing");
 const schema = require("../utils/SchemaValidation.js")
-
+const {isLoggedIn, isOwner} = require("../utils/middlewares.js");
+const Review = require("../models/Review.js");
 
 // Middleware to validate schema
 const validateSchema = (req, res, next) => {
@@ -27,7 +28,7 @@ router.get("/", async (req, res, next) => {
 })
 
 // New route
-router.get("/new", (req, res) => {
+router.get("/new", isLoggedIn, (req, res) => {
   res.render("Listings/create.ejs")
 })
 
@@ -42,15 +43,15 @@ router.get("/:id", async (req, res, next) => {
   catch(err){
       next(err)
   }
-  
 })
 
 // Create route
-router.post("/", validateSchema, async (req, res, next) => {
+router.post("/", isLoggedIn, validateSchema, async (req, res, next) => {
   try{
     console.log("Req body" , req.body);
     const {title, description, price, image, location, country} = req.body;
     const listing = new Listing({title, description, price, image, location, country});
+    listing.owner = req.session.userId;
     const newListing = await listing.save();
     console.log(newListing);
     req.flash("success", "New listing has been created");
@@ -63,7 +64,7 @@ router.post("/", validateSchema, async (req, res, next) => {
 
 
 // Edit route
-router.get("/:id/edit", async (req, res, next) => {
+router.get("/:id/edit", isLoggedIn, isOwner, async (req, res, next) => {
   try{
       const listing = await Listing.findById(req.params.id)
       res.render("Listings/edit.ejs", {listing})
@@ -74,7 +75,7 @@ router.get("/:id/edit", async (req, res, next) => {
 })
 
 // Update route
-router.post("/:id/", validateSchema, async (req, res, next) => {
+router.post("/:id/", isLoggedIn, isOwner,  validateSchema, async (req, res, next) => {
 
   try{
     const {id} = req.params;
@@ -92,11 +93,15 @@ router.post("/:id/", validateSchema, async (req, res, next) => {
 })
 
 // Delete route
-router.post("/:id/delete", async (req, res, next) => {
+router.post("/:id/delete", isLoggedIn, isOwner, async (req, res, next) => {
   try{
     const {id} = req.params;
     const deletedList = await Listing.findByIdAndDelete(id);
     console.log(deletedList);
+    const listing_reviews = deletedList.reviews;
+    for(let review in listing_reviews){
+      await Review.findByIdAndDelete(review)
+    }
     res.redirect("/listings")
   }
 

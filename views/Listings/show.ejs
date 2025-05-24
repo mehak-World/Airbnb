@@ -6,6 +6,12 @@
       <strong><%= success %></strong>  
     </div>
 <% } %>
+
+ <% if (error && error.length > 0) { %>
+    <div class="alert alert-danger alert-dismissible fade show" style = "width: 60%; margin-left: 20px" role="alert">
+      <strong><%= error %></strong>  
+    </div>
+<% } %>
   <div>
     <img
       src="<%= listing.image%>"
@@ -24,7 +30,8 @@
   </div>
 
   <div style="display: flex; gap: 10px">
-    <form method="GET" action="/listings/<%= listing._id %>/edit">
+    <% if(loggedIn && userId == listing.owner) { %>
+  <form method="GET" action="/listings/<%= listing._id %>/edit">
       <button
         style="
           background-color: rgb(248, 69, 99) !important;
@@ -45,6 +52,8 @@
         Delete this listing
       </button>
     </form>
+    <% } %>
+  
   </div>
 
   <hr style="width: 60%" />

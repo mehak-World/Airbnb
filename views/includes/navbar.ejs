@@ -15,6 +15,18 @@
          
          
         </ul>
+      <% if(loggedIn) { %>
+        <form method = "POST" action = "/logout">
+            <button class = "btn btn-dark">Logout</button>
+        </form>
+      <% } else { %>
+       <form method = "GET" action = "/signup" style = "margin-right: 10px;">
+            <button class = "btn btn-dark">Signup</button>
+        </form>
+        <form method = "GET" action = "/login">
+            <button class = "btn btn-dark">Login</button>
+        </form>
+        <% } %>
        
       </div>
     </div>
