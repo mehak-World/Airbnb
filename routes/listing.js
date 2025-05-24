@@ -19,7 +19,6 @@ router.get("/", async (req, res, next) => {
     // Find all the listings from the database
     try{
       const listings = await Listing.find({});
-      console.log(listings);
       res.render("Listings/index.ejs", {listings});
     }
     catch(err){
