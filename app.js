@@ -45,6 +45,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(cookieParser("mysecretkey"));
+app.set('trust proxy', 1);
 app.use(
   session({
     store,
@@ -61,6 +62,7 @@ app.use(
 app.use(flash());
 
 app.use((req, res, next) => {
+  console.log("Session middleware check:", req.session);
   res.locals.success = req.flash("success") || "";
   res.locals.error = req.flash("error") || "";
   if(req.session.userId){
