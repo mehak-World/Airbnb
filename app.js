@@ -172,6 +172,7 @@ if (result) {
     // Passwords match, authentication successful
     console.log('Passwords match! User authenticated.');
     req.session.userId = user._id;
+    console.log(req.session);
     req.flash("success", "Welcome " + username)
     res.redirect("/listings");
 } else {
