@@ -52,7 +52,7 @@ app.use(
     resave: false,
     saveUninitialized: true,
     cookie: {
-    secure: false, // true only if using HTTPS
+    secure: process.env.NODE_ENV === 'production',
     httpOnly: true
   }
   })
