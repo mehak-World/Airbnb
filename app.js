@@ -106,7 +106,7 @@ app.post(
     const { listing_id, review_id } = req.params;
     const listing = await Listing.findById(listing_id);
     let idx = listing.reviews.indexOf(review_id);
-    delete listing[idx];
+    delete listing.reviews[idx];
     await listing.save();
     await Review.findByIdAndDelete(review_id);
     res.redirect("/listings/" + listing_id);
