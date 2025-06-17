@@ -97,11 +97,6 @@ router.post("/:id/delete", isLoggedIn, isOwner, async (req, res, next) => {
   try{
     const {id} = req.params;
     const deletedList = await Listing.findByIdAndDelete(id);
-    console.log(deletedList);
-    const listing_reviews = deletedList.reviews;
-    for(let review in listing_reviews){
-      await Review.findByIdAndDelete(review)
-    }
     res.redirect("/listings")
   }
 
